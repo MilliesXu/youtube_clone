@@ -1,4 +1,4 @@
-import { number, object, string, TypeOf, ZodIssueCode } from 'zod'
+import { object, string, TypeOf} from 'zod'
 
 export const createUserSchema = {
   body: object({
@@ -20,6 +20,6 @@ export const createUserSchema = {
     message: "Passwords do not match",
     path: ["confirmPassword"],
   }),
-};
+}
 
 export type CreateUserInput = TypeOf<typeof createUserSchema.body>

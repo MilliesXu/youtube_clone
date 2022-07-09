@@ -5,3 +5,4 @@ database.db-journal
 migrations
 database.db
 test.db
+.env.test
