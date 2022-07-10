@@ -6,6 +6,7 @@ import helmet from 'helmet'
 
 export default (app: Express) => {
   app.use(cookieParser())
+  app.use(express.urlencoded({ extended: false }))
   app.use(express.json())
   app.use(cors({
     origin: CORS_ORIGIN,
