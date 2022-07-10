@@ -40,15 +40,19 @@ describe('Video', () => {
     await prismaGlobal.$disconnect()
   }),
   describe('Upload video and success', () => {
-    it('Should return 200, videoInfo, and successMessage', async () => {
+    it('Should return 201, videoInfo, and successMessage', async () => {
       const { body, statusCode } = await supertest(app).post('/api/video')
         .set('Connection', 'keep-alive')
         .set('Cookie', `accessToken=${token}`)
         .attach('file', 'C://Users/winzc/Downloads/Learn the alphabet with Top Gear.mp4')
-        .field('title', videoPayload.title)
-        .field('description', videoPayload.description)
 
-      expect(statusCode).toBe(200)
+      expect(statusCode).toBe(201)
+      expect(body).toMatchObject({
+        user: {
+          username: userPayload.username
+        },
+        extension: 'mp4'
+      })
     })
   })
 })

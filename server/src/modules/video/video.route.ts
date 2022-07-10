@@ -8,6 +8,6 @@ import validateRequest from '../../middlewares/validateRequest'
 
 const router = express.Router()
 
-router.post('/', deserializeUser, validateRequest(createVideoSchema.body), uploadVideoHandler)
+router.post('/', deserializeUser, uploadVideoHandler)
 
 export default router

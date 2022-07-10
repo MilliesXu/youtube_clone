@@ -3,11 +3,9 @@ import prisma from "../../utils/prisma"
 
 const nanoId = customAlphabet('1234567890abcdefghijklmnopqrstuvwyz', 10)
 
-export const createVideo = async (data: any, userId: number) => {
+export const createVideo = async (userId: number) => {
   return await prisma.video.create({
     data: {
-      title: data.title,
-      description: data.descrtiption,
       videoId: nanoId(),
       user: {
         connect: {
@@ -25,14 +23,12 @@ export const createVideo = async (data: any, userId: number) => {
   })
 }
 
-export const updateVideo = async (id: number, data: any, extension: string) => {
+export const updateVideo = async (id: number, extension: string) => {
   return await prisma.video.update({
     where: {
       id
     },
     data: {
-      title: data.title,
-      description: data.description,
       extension
     },
     include: {

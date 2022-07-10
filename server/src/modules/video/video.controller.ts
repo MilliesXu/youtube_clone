@@ -15,10 +15,9 @@ const getPath = ({ videoId, extension }: {videoId:  string, extension: string}) 
 export const uploadVideoHandler = async (req: Request<{}, {}, CreateVideoInput>, res: Response, next: NextFunction) => {
   try {
     const bb = busboy({ headers: req.headers })
-    const body = req.body
-    const userId = res.locals.userId
+    const { userId } = res.locals.user
     let extension: string
-    const video = await createVideo(body, userId)
+    const video = await createVideo(userId)
   
     bb.on('file', async (_, file, info) => {
       if (!MIME_TYPES.includes(info.mimeType)) {
@@ -39,24 +38,19 @@ export const uploadVideoHandler = async (req: Request<{}, {}, CreateVideoInput>,
     })
   
     bb.on('close', async () => {
-      const updatedVideo = await updateVideo(video.id, {
-        title: video.title,
-        description: video.description,
-      }, extension)
+      const updatedVideo = await updateVideo(video.id, extension)
       res.writeHead(StatusCodes.CREATED, {
         Connection: "close",
         "Content-Type": "application/json",
       });
   
       res.write(JSON.stringify(updatedVideo))
+      res.end()
     })
-  
-    res.send({
-      videoInfo: updateVideo,
-      successMessage: 'Successfully upload video'
-    })
+
     return req.pipe(bb) 
   } catch (error: any) {
+    console.log(error)
     next(new MyError(error.message, error.errorCode))
   }
 }

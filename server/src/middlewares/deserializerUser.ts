@@ -14,7 +14,7 @@ const deserializeUser = async (req: Request, res: Response, next: NextFunction) 
 
     if (!decoded) throw new MyError('Unauthrozied', StatusCodes.UNAUTHORIZED)
 
-    res.locals.userId = decoded
+    res.locals.user = decoded
 
     next()
   } catch (error: any) {
