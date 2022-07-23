@@ -1,12 +1,15 @@
-import { number, object, string, TypeOf, ZodIssueCode } from 'zod'
+import { boolean, number, object, string, TypeOf, ZodIssueCode } from 'zod'
 
-export const createVideoSchema = {
+export const updateVideoSchema = {
   body: object({
-    title: string({
-      required_error: "email is required",
-    }),
-    description: string()
+    title: string(),
+    description: string(),
+    published: boolean()
+  }),
+  params: object({
+    videoId: string()
   })
 }
 
-export type CreateVideoInput = TypeOf<typeof createVideoSchema.body>
+export type UpdateVideoInput = TypeOf<typeof updateVideoSchema.body>
+export type UpdateVideoParams = TypeOf<typeof updateVideoSchema.params>

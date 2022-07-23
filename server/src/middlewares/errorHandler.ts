@@ -10,6 +10,22 @@ export class MyError extends Error {
   }
 }
 
+type AsyncHandler<R, Q, P, L extends Record<string, any>> = (
+  req: Request<P, {}, R, Q>,
+  res: Response<{}, L>,
+  next: NextFunction
+) => Promise<void>;
+
+type WrappedHandler<R, Q, P, L extends Record<string, any>> = (
+  ...args: Parameters<AsyncHandler<R, Q, P, L>>
+) => void;
+
+export const createAsync = <ReqBody = unknown, ReqQuery = qs.ParsedQs, Params = Record<string, string>, Locals extends Record<string, any> = Record<string, any>> (fn: AsyncHandler<ReqBody, ReqQuery, Params, Locals>): WrappedHandler<ReqBody, ReqQuery, Params, Locals> => {
+  return (req, res, next) => {
+    fn(req, res, next).catch((err) => next(err));
+  };
+} 
+
 const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   const message = err.message ? err.message : 'Internal server error'
   const code = err.errorCode ? err.errorCode : StatusCodes.INTERNAL_SERVER_ERROR
