@@ -45,6 +45,21 @@ export const findVideo = async (videoId: number) => {
   return video
 }
 
+export const findVideos = async () => {
+  return await prisma.video.findMany({
+    where: {
+      published: true
+    },
+    include: {
+      user: {
+        select: {
+          username: true
+        }
+      }
+    }
+  })
+}
+
 export const updateVideo = async (videoId: number, data: UpdateVideoInput, userId: number) => {
   const video = await findVideo(videoId)
 

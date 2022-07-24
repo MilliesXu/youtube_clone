@@ -93,7 +93,7 @@ describe('Video', () => {
         .send({
           title: 'This is update one',
           description: 'This is update one',
-          publised: true
+          published: true
         })
         .expect(404)
     })
@@ -121,6 +121,31 @@ describe('Video', () => {
         },
         successMessage: 'Successfully update video'
       })
+    })
+  })
+  describe('Get video and success', () => {
+    it('Should return 200 and videos', async () => {
+      const {body, statusCode} = await supertest(app).get(`/api/video/`)
+
+      expect(statusCode).toBe(200)
+      expect(body).toMatchObject({
+        videos: [{
+          user: {
+            username: userPayload.username,
+          },
+          extension: 'mp4',
+          title: 'This is update one',
+          description: 'This is update one',
+          published: true
+        }]
+      })
+    })
+  })
+  describe('Stream video but vidoe not found', () => {
+    it('Should return 404', async () => {
+      await supertest(app).get(`/api/video/${0}`)
+        .set('range', '1256')
+        .expect(404)
     })
   })
 })
