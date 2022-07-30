@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import { MyError } from '../../middlewares/errorHandler'
+import { createAsync, MyError } from '../../middlewares/errorHandler'
 import { CreateUserInput } from './user.schema'
-import { createUser } from './user.service'
+import { createUser, findUserById } from './user.service'
 
 export const registerUserHandler = async (req: Request<{}, {}, CreateUserInput>, res: Response, next: NextFunction) => {
   try {
@@ -21,3 +21,13 @@ export const registerUserHandler = async (req: Request<{}, {}, CreateUserInput>,
     next(new MyError('Internal Server Error', StatusCodes.INTERNAL_SERVER_ERROR))
   }
 }
+
+export const getUserHandler = createAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const userId = res.locals.user.userId
+
+  const user = await findUserById(userId)
+
+  res.send({
+    userInfo: user
+  })
+})

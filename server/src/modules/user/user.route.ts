@@ -1,10 +1,12 @@
 import express from 'express'
-import { processRequestBody } from "zod-express-middleware";
-import { registerUserHandler } from './user.controller'
+import deserializeUser from '../../middlewares/deserializerUser'
+import validateRequest from '../../middlewares/validateRequest'
+import { getUserHandler, registerUserHandler } from './user.controller'
 import { createUserSchema } from './user.schema'
 
 const router = express.Router()
 
-router.post('/', processRequestBody(createUserSchema.body), registerUserHandler)
+router.post('/', validateRequest(createUserSchema), registerUserHandler)
+router.get('/', deserializeUser, getUserHandler)
 
 export default router

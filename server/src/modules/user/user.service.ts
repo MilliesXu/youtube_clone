@@ -30,3 +30,15 @@ export const compareUserPassword = async (email: string, password: string) => {
 
   return user
 }
+
+export const findUserById = async (id: number) => {
+  const user = await prisma.user.findUnique({
+    where: {
+      id
+    }
+  })
+
+  if (!user) throw new MyError('Invalid email or password', StatusCodes.UNAUTHORIZED)
+
+  return user
+}

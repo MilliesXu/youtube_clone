@@ -1,6 +1,6 @@
 import { object, string, TypeOf} from 'zod'
 
-export const createUserSchema = {
+export const createUserSchema = object({
   body: object({
     username: string({
       required_error: "username is required",
@@ -14,12 +14,12 @@ export const createUserSchema = {
       .min(6, "Password must be at least 6 characters long")
       .max(64, "Password should not be longer than 64 characters"),
     confirmPassword: string({
-      required_error: "username is required",
+      required_error: "confirm Password is required",
     }),
   }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
   }),
-}
+})
 
-export type CreateUserInput = TypeOf<typeof createUserSchema.body>
+export type CreateUserInput = TypeOf<typeof createUserSchema>['body']

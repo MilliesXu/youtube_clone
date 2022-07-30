@@ -7,3 +7,4 @@ database.db
 test.db
 test.db-journal
 .env.test
+server/videos
